@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SocialProviders } from "@/lib/interfaces/auth/auth.interfaces";
-import { ClassNameProps } from "@/lib/interfaces/shared/interface";
-import { cn } from "@/lib/utils/utils";
+import { SocialProviders } from "@/lib/interfaces/auth.interface";
+import { ClassNameProps } from "@/lib/interfaces/interface";
+import { cn } from "@/lib/util/utils";
 import React from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 

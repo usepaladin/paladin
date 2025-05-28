@@ -25,3 +25,9 @@ export interface ControllerResponse<T> {
     data?: T;
     error?: string;
 }
+
+export interface FormFieldProps<T> {
+    value: T;
+    onChange: (value: T) => void;
+    onBlur?: () => void;
+}

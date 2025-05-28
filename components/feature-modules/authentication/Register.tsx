@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthenticationProps } from "@/lib/interfaces/auth/auth.interfaces";
+import { AuthenticationProps } from "@/lib/interfaces/auth.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";

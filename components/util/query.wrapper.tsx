@@ -1,6 +1,6 @@
 "use client";
 
-import { FCWC, Propless } from "@/lib/interface/interface";
+import { FCWC, Propless } from "@/lib/interfaces/interface";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const QueryClientWrapper: FCWC<Propless> = ({ children }) => {

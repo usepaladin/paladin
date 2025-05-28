@@ -11,7 +11,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SocialProviders } from "@/lib/interfaces/auth/auth.interfaces";
+import { SocialProviders } from "@/lib/interfaces/auth.interface";
 import Link from "next/link";
 import { FC, useState } from "react";
 import { UseFormReturn } from "react-hook-form";

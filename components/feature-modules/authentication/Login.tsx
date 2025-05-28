@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import {
@@ -13,8 +11,9 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthenticationProps } from "@/lib/interfaces/auth/auth.interfaces";
+import { AuthenticationProps } from "@/lib/interfaces/auth.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";

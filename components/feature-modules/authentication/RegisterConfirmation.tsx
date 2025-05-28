@@ -8,8 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import {
     AuthenticationProps,
     RegistrationConfirmation,
-} from "@/lib/interfaces/auth/auth.interfaces";
-import { FormOTP, OTPFormSchema } from "@/lib/utils/utils";
+} from "@/lib/interfaces/auth.interface";
+import { FormOTP, OTPFormSchema } from "@/lib/util/form/form.util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
