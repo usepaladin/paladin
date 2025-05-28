@@ -1,6 +1,6 @@
-import { FormFieldProps } from "@/lib/interfaces/form/forms.interfaces";
-import { ClassNameProps } from "@/lib/interfaces/shared/interface";
-import { cn } from "@/lib/utils/utils";
+import { ClassNameProps, FormFieldProps } from "@/lib/interfaces/interface";
+
+import { cn } from "@/lib/util/utils";
 import {
     REGEXP_ONLY_CHARS,
     REGEXP_ONLY_DIGITS,

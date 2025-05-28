@@ -1,4 +1,4 @@
-import { FCWC, Propless } from "@/lib/interface/interface";
+import { FCWC, Propless } from "@/lib/interfaces/interface";
 
 const StoreProviderWrapper: FCWC<Propless> = ({ children }) => {
     return <>{children}</>;
