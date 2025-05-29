@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/components/provider/AuthContex";
 import QueryClientWrapper from "@/components/util/query.wrapper";
 import StoreProviderWrapper from "@/components/util/store.wrapper";
 import type { Metadata } from "next";
@@ -30,7 +31,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <QueryClientWrapper>
-                    <StoreProviderWrapper>{children}</StoreProviderWrapper>
+                    <StoreProviderWrapper>
+                        <AuthProvider>{children}</AuthProvider>
+                    </StoreProviderWrapper>
                 </QueryClientWrapper>
             </body>
         </html>
