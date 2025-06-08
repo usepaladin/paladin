@@ -12,6 +12,10 @@ export const responseSuccess = <T>(
     return response.status >= 200 && response.status < 300;
 };
 
+export function undefinedIfNull<T>(value: T | null): T | undefined {
+    return value === null ? undefined : value;
+}
+
 export const getInitials = (name: string): string => {
     // Split the name into parts, filtering out empty strings caused by extra spaces
     const nameParts = name.trim().split(/\s+/);
