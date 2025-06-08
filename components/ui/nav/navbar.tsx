@@ -1,7 +1,7 @@
 "use server";
 
-import { handleUserSignout } from "@/lib/utils/auth/auth.utils";
-import { createSSRClient } from "@/lib/utils/supabase/client";
+import { handleUserSignout } from "@/lib/util/auth/auth.util";
+import { createSSRClient } from "@/lib/util/supabase/client";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { AuthenticatedNavbar, UnauthenticatedNavbar } from "./navbar.content";
 

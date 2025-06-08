@@ -1,12 +1,11 @@
 "use client";
 
-import { useUserStore } from "@/components/provider/user.provider";
-import { FCWC, Propless } from "@/lib/interfaces/shared/interface";
+import { FCWC, Propless } from "@/lib/interfaces/interface";
 import Link from "next/link";
 import { FC } from "react";
 import { Button } from "../button";
-import { SidebarTrigger } from "../sidebar";
 import { ModeToggle } from "../themeToggle";
+import { useProfile } from "@/hooks/useProfile";
 
 interface AuthenticatedProps {
     handleSignout: () => Promise<void>;
@@ -15,14 +14,11 @@ interface AuthenticatedProps {
 export const AuthenticatedNavbar: FC<AuthenticatedProps> = ({
     handleSignout,
 }) => {
-    const { user } = useUserStore((state) => state);
+    const query = useProfile();
 
     return (
         <NavbarWrapper>
             <div className="w-full flex">
-                <div className="w-auto flex-grow">
-                    <SidebarTrigger />
-                </div>
                 <div>{user?.name}</div>
                 <div className="mr-2">
                     <Button onClick={handleSignout} variant={"outline"}>
