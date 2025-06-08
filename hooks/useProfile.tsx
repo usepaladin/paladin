@@ -1,20 +1,6 @@
 import { useAuth } from "@/components/provider/AuthContex";
+import { fetchSessionUser } from "@/controller/user.controller";
 import { useQuery } from "@tanstack/react-query";
-
-async function fetchUserProfile(userId: string, accessToken: string):   {
-    //todo: Connect with Core Service
-    const response = await fetch(``, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
-    }
-
-    return response.json();
-}
 
 export function useProfile() {
     const { session } = useAuth();
@@ -31,9 +17,9 @@ export function useProfile() {
 
     return useQuery({
         queryKey: ["userProfile", session.user.id],
-        queryFn: () =>
-            fetchUserProfile(session.user.id, session.access_token),
+        queryFn: () => fetchSessionUser(session),
         enabled: !!session?.user.id, // Only fetch if user is authenticated
-        staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+        retry: 1, // Retry once on failure
+        staleTime: 5 * 60 * 1000, // Cache for 5 minutes,
     });
 }
