@@ -1,11 +1,12 @@
-import { AuthProvider } from "@/components/provider/AuthContex";
+import { AuthProvider } from "@/components/provider/AuthContext";
+import { ThemeProvider } from "@/components/provider/ThemeContext";
 import { Navbar } from "@/components/ui/nav/navbar";
 import QueryClientWrapper from "@/components/util/query.wrapper";
 import StoreProviderWrapper from "@/components/util/store.wrapper";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -42,22 +43,32 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html
+            className={robotoFont.className}
+            lang="en"
+            suppressHydrationWarning
+        >
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                
-                <QueryClientWrapper>
-                    <StoreProviderWrapper>
-                        <AuthProvider>
-                            <main className="w-full">
-                                <Navbar />
-                                {children}
-                            </main>
-                        </AuthProvider>
-                    </StoreProviderWrapper>
-                </QueryClientWrapper>
-                <Toaster richColors/>
+                <ThemeProvider
+                    attribute={"class"}
+                    defaultTheme="theme"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <QueryClientWrapper>
+                        <StoreProviderWrapper>
+                            <AuthProvider>
+                                <main className="w-full">
+                                    <Navbar />
+                                    {children}
+                                </main>
+                            </AuthProvider>
+                        </StoreProviderWrapper>
+                    </QueryClientWrapper>
+                </ThemeProvider>
+                <Toaster richColors />
             </body>
         </html>
     );

@@ -9,7 +9,7 @@ import { Session } from "@supabase/supabase-js";
  */
 export const fetchSessionUser = async (session: Session): Promise<User> => {
     const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + `core/api/v1/user/`,
+        process.env.NEXT_PUBLIC_API_URL + `/v1/user/`,
         {
             method: "GET",
             headers: {

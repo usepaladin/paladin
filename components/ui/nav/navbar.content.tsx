@@ -1,29 +1,29 @@
 "use client";
 
+import { useProfile } from "@/hooks/useProfile";
 import { FCWC, Propless } from "@/lib/interfaces/interface";
 import Link from "next/link";
 import { FC } from "react";
 import { Button } from "../button";
 import { ModeToggle } from "../themeToggle";
-import { useProfile } from "@/hooks/useProfile";
 
-interface AuthenticatedProps {
-    handleSignout: () => Promise<void>;
-}
+export const AuthenticatedNavbar: FC<Propless> = () => {
+    const { data: user, error, isLoading, isError } = useProfile();
 
-export const AuthenticatedNavbar: FC<AuthenticatedProps> = ({
-    handleSignout,
-}) => {
-    const query = useProfile();
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError || !user) {
+        return <div>Error loading profile</div>;
+    }
 
     return (
         <NavbarWrapper>
             <div className="w-full flex">
-                <div>{user?.name}</div>
+                <div>{user.name}</div>
                 <div className="mr-2">
-                    <Button onClick={handleSignout} variant={"outline"}>
-                        Logout
-                    </Button>
+                    <Button variant={"outline"}>Logout</Button>
                 </div>
             </div>
         </NavbarWrapper>

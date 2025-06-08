@@ -1,5 +1,8 @@
-import React from "react";
+import { ChildNodeProps } from "@/lib/interfaces/interface";
+import { FC } from "react";
 
-export const layout = () => {
-    return <div>layout</div>;
+const layout: FC<ChildNodeProps> = ({ children }) => {
+    return <div>{children}</div>;
 };
+
+export default layout;

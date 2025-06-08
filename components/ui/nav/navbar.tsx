@@ -1,20 +1,14 @@
-"use server";
+"use client";
 
-import { handleUserSignout } from "@/lib/util/auth/auth.util";
-import { createSSRClient } from "@/lib/util/supabase/client";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { useAuth } from "@/components/provider/AuthContext";
 import { AuthenticatedNavbar, UnauthenticatedNavbar } from "./navbar.content";
 
-export const Navbar = async () => {
-    "use server";
+export const Navbar = () => {
+    const { session } = useAuth();
 
-    const supabaseClient: SupabaseClient = await createSSRClient();
-    // User session can be spoofed, but we are just using this
-    // information to validate user information instead of information protection
-    const { data, error } = await supabaseClient.auth.getSession();
-    if (error || !data?.session) {
+    if (!session) {
         return <UnauthenticatedNavbar />;
     }
 
-    return <AuthenticatedNavbar handleSignout={handleUserSignout} />;
+    return <AuthenticatedNavbar />;
 };
