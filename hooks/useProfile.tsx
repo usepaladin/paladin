@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuth } from "@/components/provider/AuthContext";
 import { fetchSessionUser } from "@/controller/user.controller";
 import { useQuery } from "@tanstack/react-query";

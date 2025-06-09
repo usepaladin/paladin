@@ -1,49 +1,43 @@
 "use client";
 
-import { useProfile } from "@/hooks/useProfile";
 import { FCWC, Propless } from "@/lib/interfaces/interface";
+import { User } from "@/lib/interfaces/user.interface";
+import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
 import { FC } from "react";
+import { UserProfileDropdown } from "../avatar-dropdown";
 import { Button } from "../button";
+import { Skeleton } from "../skeleton";
 import { ModeToggle } from "../themeToggle";
 
-export const AuthenticatedNavbar: FC<Propless> = () => {
-    const { data: user, error, isLoading, isError } = useProfile();
+interface UserProps {
+    user: User;
+}
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError || !user) {
-        return <div>Error loading profile</div>;
-    }
-
-    return (
-        <NavbarWrapper>
-            <div className="w-full flex">
-                <div>{user.name}</div>
-                <div className="mr-2">
-                    <Button variant={"outline"}>Logout</Button>
-                </div>
-            </div>
-        </NavbarWrapper>
-    );
+export const NavbarUserProfile: FC<UseQueryResult<User>> = ({
+    data: user,
+    isLoading,
+    isError,
+}) => {
+    if (isLoading) return <Skeleton className="size-8 rounded-md" />;
+    if (!user) return <UnauthenticatedNavbarProfile />;
+    return <AuthenticatedNavbarProfile user={user} />;
 };
 
-export const UnauthenticatedNavbar: FC<Propless> = () => {
+export const AuthenticatedNavbarProfile: FC<UserProps> = ({ user }) => {
+    return <UserProfileDropdown user={user} />;
+};
+
+export const UnauthenticatedNavbarProfile: FC<Propless> = () => {
     return (
-        <NavbarWrapper>
-            <div className="flex justify-end mr-4 flex-grow w-auto">
-                <div className="flex">
-                    <Button variant={"outline"}>
-                        <Link href="/auth/login">Login</Link>
-                    </Button>
-                    <Button className="ml-2">
-                        <Link href="/auth/register">Get Started</Link>
-                    </Button>
-                </div>
-            </div>
-        </NavbarWrapper>
+        <div className="flex">
+            <Button variant={"outline"}>
+                <Link href="/auth/login">Login</Link>
+            </Button>
+            <Button className="ml-2">
+                <Link href="/auth/register">Get Started</Link>
+            </Button>
+        </div>
     );
 };
 

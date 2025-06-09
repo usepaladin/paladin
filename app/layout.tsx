@@ -1,6 +1,6 @@
 import { AuthProvider } from "@/components/provider/AuthContext";
 import { ThemeProvider } from "@/components/provider/ThemeContext";
-import { Navbar } from "@/components/ui/nav/navbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import QueryClientWrapper from "@/components/util/query.wrapper";
 import StoreProviderWrapper from "@/components/util/store.wrapper";
 import type { Metadata } from "next";
@@ -60,10 +60,9 @@ export default function RootLayout({
                     <QueryClientWrapper>
                         <StoreProviderWrapper>
                             <AuthProvider>
-                                <main className="w-full">
-                                    <Navbar />
-                                    {children}
-                                </main>
+                                <SidebarProvider>
+                                    <main className="w-full">{children}</main>
+                                </SidebarProvider>
                             </AuthProvider>
                         </StoreProviderWrapper>
                     </QueryClientWrapper>

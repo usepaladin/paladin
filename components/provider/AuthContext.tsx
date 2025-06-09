@@ -2,11 +2,12 @@
 
 import { createClient } from "@/lib/util/supabase/client";
 import { Session } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
     session: Session | null;
     user: Session["user"] | null;
+    client?: ReturnType<typeof createClient>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,39 +16,26 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const client = useMemo(() => createClient(), []);
+    const client = createClient();
     const [session, setSession] = useState<Session | null>(null);
 
     useEffect(() => {
-        // Get initial session
-        client.auth
-            .getSession()
-            .then(({ data: { session } }) => {
-                setSession(session);
-            })
-            .catch((error) => {
-                console.error("Failed to get initial session:", error);
-            });
-
-        // Listen for auth state changes
-        const {
-            data: { subscription },
-        } = client.auth.onAuthStateChange((event, session) => {
-            if (
-                event === "SIGNED_IN" ||
-                event === "SIGNED_OUT" ||
-                event === "TOKEN_REFRESHED"
-            ) {
-                setSession(session);
+        client.auth.onAuthStateChange((_, newSession) => {
+            console.log("Auth state changed:", session);
+            if (!newSession) {
+                setSession(null);
+                return;
             }
-        });
 
-        // Cleanup subscription on unmount
-        return () => subscription.unsubscribe();
-    }, [client]);
+            if (newSession.user.id === session?.user.id) return;
+            setSession(newSession);
+        });
+    });
 
     return (
-        <AuthContext.Provider value={{ session, user: session?.user ?? null }}>
+        <AuthContext.Provider
+            value={{ session, user: session?.user ?? null, client: client }}
+        >
             {children}
         </AuthContext.Provider>
     );
