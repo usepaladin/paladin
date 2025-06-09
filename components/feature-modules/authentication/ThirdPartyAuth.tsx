@@ -16,8 +16,16 @@ interface ThirdPartyProps extends ClassNameProps {
 const ThirdParty: React.FC<ThirdPartyProps> = ({
     className,
     iconClass,
-    socialProviderAuthentication: handleAuth,
+    socialProviderAuthentication,
 }) => {
+    const handleAuth = async (provider: SocialProviders) => {
+        try {
+            await socialProviderAuthentication(provider);
+        } catch (error) {
+            console.error("Authentication failed:", error);
+        }
+    };
+
     return (
         <>
             <div className={cn("w-full flex h-fit items-center", className)}>

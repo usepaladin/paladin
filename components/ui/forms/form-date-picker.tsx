@@ -27,7 +27,7 @@ export const FormDatePicker: FC<DatePickerProps> = ({
         <FormItem className="flex flex-col w-full">
             {title && (
                 <FormLabel className="font-semibold">
-                    Date of Birth {required && "*"}
+                    {title} {required && "*"}
                 </FormLabel>
             )}
             <FormControl>

@@ -78,6 +78,7 @@ const RegisterConfirmation: FC<RegisterConfirmationProps> = ({
                         res?.error?.message ?? "Failed to verify OTP"
                     );
                 }
+                return res;
             }
         );
 
@@ -92,8 +93,6 @@ const RegisterConfirmation: FC<RegisterConfirmationProps> = ({
                 return error.message;
             },
         });
-
-        if (!otpVerifyError) return;
     };
 
     return (

@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "types": "http://localhost:8081/docs/v3/api-docs --output src/types/types.ts"
+        "types": "openapi-typescript http://localhost:8081/docs/v3/api-docs --output src/types/types.ts"
     },
     "dependencies": {
         "@hookform/resolvers": "^5.0.1",

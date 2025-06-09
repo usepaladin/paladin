@@ -5,18 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 export function useProfile() {
     const { session } = useAuth();
 
-    // If no session or user, we can return early or handle it as needed
-    if (!session?.user) {
-        return {
-            data: null,
-            error: null,
-            isLoading: false,
-            isError: false,
-        };
-    }
-
     return useQuery({
-        queryKey: ["userProfile", session.user.id],
+        queryKey: ["userProfile", session?.user.id],
         queryFn: () => fetchSessionUser(session),
         enabled: !!session?.user.id, // Only fetch if user is authenticated
         retry: 1, // Retry once on failure

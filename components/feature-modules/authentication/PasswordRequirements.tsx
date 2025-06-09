@@ -51,7 +51,7 @@ export const PasswordRequirements: FC<Props> = ({ control, visible }) => {
                             <CheckMarkBox
                                 validated={passwordValidationRequirements[
                                     validation
-                                ].test(password)}
+                                ].test(password || "")}
                             />
 
                             <p className="ml-2 text-sm font-semibold">

@@ -17,6 +17,10 @@ export function undefinedIfNull<T>(value: T | null): T | undefined {
 }
 
 export const getInitials = (name: string): string => {
+    if (!name.trim()) {
+        return "";
+    }
+
     // Split the name into parts, filtering out empty strings caused by extra spaces
     const nameParts = name.trim().split(/\s+/);
 
@@ -31,4 +35,13 @@ export const allNotNull = <T>(
     values: (T | null)[]
 ): values is NonNullable<T>[] => {
     return values.every((value) => value !== null);
+};
+
+export const api = () => {
+    const url = process.env.NEXT_PUBLIC_API_URL;
+    if (!url) {
+        throw new Error("API URL not configured");
+    }
+
+    return url;
 };

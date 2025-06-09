@@ -1,4 +1,5 @@
 import { User } from "@/lib/interfaces/user.interface";
+import { api } from "@/lib/util/utils";
 import { Session } from "@supabase/supabase-js";
 
 /**
@@ -7,17 +8,22 @@ import { Session } from "@supabase/supabase-js";
  * @param {Session} session - The current active session for the user
  * @returns {UserDTO} - The user's profile
  */
-export const fetchSessionUser = async (session: Session): Promise<User> => {
-    const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + `/v1/user/`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${session.access_token}`,
-            },
-        }
-    );
+export const fetchSessionUser = async (
+    session: Session | null
+): Promise<User> => {
+    if (!session?.access_token) {
+        throw new Error("No active session found");
+    }
+
+    const url = api();
+
+    const response = await fetch(`${url}/v1/user/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+        },
+    });
 
     if (response.ok) {
         return await response.json();

@@ -4,7 +4,6 @@ import { components, operations } from "@/lib/types/types";
 // --- 🎯 Core User Models ---
 export type User = components["schemas"]["User"];
 export type UserProfile = components["schemas"]["UserProfile"];
-export type OrganisationMember = components["schemas"]["OrganisationMember"];
 
 // --- 📦 Request Payloads ---
 export type UpdateUserProfileRequest =

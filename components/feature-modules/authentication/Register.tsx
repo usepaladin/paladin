@@ -33,7 +33,7 @@ const registrationSchema = z
                 "Password must contain at least one special character"
             )
             .nonempty("Password is required"),
-        confirmPassword: z.string().min(4),
+        confirmPassword: z.string().min(1, "Password confirmation is required"),
     })
     .superRefine(({ password, confirmPassword }, ctx) => {
         if (confirmPassword !== password) {

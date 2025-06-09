@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const MIN_DATE = new Date("1900-01-01");
-export const CURRENT_DATE = new Date();
+export const getCurrentDate = () => new Date();
 
 export const OTPFormSchema = z.object({
     otp: z

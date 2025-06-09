@@ -22,8 +22,8 @@ import { z } from "zod";
 import ThirdParty from "./ThirdPartyAuth";
 
 const loginSchema = z.object({
-    email: z.string().email("Invalid Email").nonempty("Email is required"),
-    password: z.string().nonempty("Password is required"),
+    email: z.string().email("Invalid Email").min(1, "Email is required"),
+    password: z.string().min(1, "Password is required"),
 });
 
 type Login = z.infer<typeof loginSchema>;
