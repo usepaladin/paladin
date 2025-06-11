@@ -2,7 +2,7 @@
 
 import { useProfile } from "@/hooks/useProfile";
 import { SidebarTrigger } from "../sidebar";
-import { NavbarUserProfile, NavbarWrapper } from "./navbar.content";
+import { NavbarLogo, NavbarUserProfile, NavbarWrapper } from "./navbar.content";
 
 export const AppNavbar = () => {
     const query = useProfile();
@@ -10,7 +10,7 @@ export const AppNavbar = () => {
     return (
         <NavbarWrapper>
             <SidebarTrigger className="mr-4 cursor-pointer" />
-            <div className="text-lg font-bold w-32">[Logo]</div>
+            <NavbarLogo href="/dashboard" />
 
             <div className="flex w-auto flex-grow justify-end mr-2">
                 <NavbarUserProfile {...query} />

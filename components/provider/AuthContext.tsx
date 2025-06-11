@@ -13,6 +13,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
     session: null,
     user: null,
+    client: undefined,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

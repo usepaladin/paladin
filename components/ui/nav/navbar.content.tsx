@@ -51,3 +51,15 @@ export const NavbarWrapper: FCWC<Propless> = ({ children }) => {
         </div>
     );
 };
+
+interface LogoProps {
+    href: string;
+}
+
+export const NavbarLogo: FC<LogoProps> = ({ href }) => {
+    return (
+        <Link href={href}>
+            <div className="text-lg font-bold w-32">[Logo]</div>
+        </Link>
+    );
+};

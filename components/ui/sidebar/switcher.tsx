@@ -1,7 +1,6 @@
 "use client";
 
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
-import * as React from "react";
 
 import {
     DropdownMenu,
@@ -14,16 +13,26 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { JSX, useState } from "react";
 
-export function VersionSwitcher({
-    versions,
-    defaultVersion,
-}: {
-    versions: string[];
-    defaultVersion: string;
-}) {
-    const [selectedVersion, setSelectedVersion] =
-        React.useState(defaultVersion);
+interface Choice {
+    id: string;
+}
+
+interface Props<T extends Choice> {
+    title: String;
+    render: (value: T) => JSX.Element;
+    options: T[];
+    defaultOption?: T;
+}
+
+export const OptionSwitcher = <T extends Choice>({
+    options,
+    defaultOption,
+    render,
+    title,
+}: Props<T>) => {
+    const [selectedOption, setSelectedOption] = useState(defaultOption);
 
     return (
         <SidebarMenu>
@@ -37,12 +46,14 @@ export function VersionSwitcher({
                             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                                 <GalleryVerticalEnd className="size-4" />
                             </div>
-                            <div className="flex flex-col gap-0.5 leading-none">
-                                <span className="font-semibold">
-                                    Documentation
-                                </span>
-                                <span className="">v{selectedVersion}</span>
-                            </div>
+                            {selectedOption && (
+                                <div className="flex flex-col gap-0.5 leading-none">
+                                    <span className="font-semibold">
+                                        {title}
+                                    </span>
+                                    {render(selectedOption)}
+                                </div>
+                            )}
                             <ChevronsUpDown className="ml-auto" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
@@ -50,13 +61,13 @@ export function VersionSwitcher({
                         className="w-[--radix-dropdown-menu-trigger-width]"
                         align="start"
                     >
-                        {versions.map((version) => (
+                        {options.map((option) => (
                             <DropdownMenuItem
-                                key={version}
-                                onSelect={() => setSelectedVersion(version)}
+                                key={option.id}
+                                onSelect={() => setSelectedOption(option)}
                             >
-                                v{version}{" "}
-                                {version === selectedVersion && (
+                                {render(option)}
+                                {option.id === selectedOption?.id && (
                                     <Check className="ml-auto" />
                                 )}
                             </DropdownMenuItem>
@@ -66,4 +77,4 @@ export function VersionSwitcher({
             </SidebarMenuItem>
         </SidebarMenu>
     );
-}
+};

@@ -33,3 +33,31 @@ export const fetchSessionUser = async (
         `Failed to fetch user profile: ${response.status} ${response.statusText}`
     );
 };
+
+export const updateUser = async (
+    session: Session | null,
+    user: User
+): Promise<User> => {
+    if (!session?.access_token) {
+        throw new Error("No active session found");
+    }
+
+    const url = api();
+
+    const response = await fetch(`${url}/v1/user/`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify(user),
+    });
+
+    if (response.ok) {
+        return await response.json();
+    }
+
+    throw new Error(
+        `Failed to update user profile: ${response.status} ${response.statusText}`
+    );
+};

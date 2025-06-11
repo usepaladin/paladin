@@ -12,168 +12,206 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar";
-import { SearchForm } from "./search-form";
-import { VersionSwitcher } from "./switcher";
+import { Icon } from "@/lib/interfaces/interface";
+import { Pen } from "lucide-react";
+import Link from "next/link";
 
 // This is sample data.
-const data = {
-    versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
-    navMain: [
-        {
-            title: "Getting Started",
-            url: "#",
-            items: [
-                {
-                    title: "Installation",
-                    url: "#",
-                },
-                {
-                    title: "Project Structure",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Building Your Application",
-            url: "#",
-            items: [
-                {
-                    title: "Routing",
-                    url: "#",
-                },
-                {
-                    title: "Data Fetching",
-                    url: "#",
-                    isActive: true,
-                },
-                {
-                    title: "Rendering",
-                    url: "#",
-                },
-                {
-                    title: "Caching",
-                    url: "#",
-                },
-                {
-                    title: "Styling",
-                    url: "#",
-                },
-                {
-                    title: "Optimizing",
-                    url: "#",
-                },
-                {
-                    title: "Configuring",
-                    url: "#",
-                },
-                {
-                    title: "Testing",
-                    url: "#",
-                },
-                {
-                    title: "Authentication",
-                    url: "#",
-                },
-                {
-                    title: "Deploying",
-                    url: "#",
-                },
-                {
-                    title: "Upgrading",
-                    url: "#",
-                },
-                {
-                    title: "Examples",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "API Reference",
-            url: "#",
-            items: [
-                {
-                    title: "Components",
-                    url: "#",
-                },
-                {
-                    title: "File Conventions",
-                    url: "#",
-                },
-                {
-                    title: "Functions",
-                    url: "#",
-                },
-                {
-                    title: "next.config.js Options",
-                    url: "#",
-                },
-                {
-                    title: "CLI",
-                    url: "#",
-                },
-                {
-                    title: "Edge Runtime",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Architecture",
-            url: "#",
-            items: [
-                {
-                    title: "Accessibility",
-                    url: "#",
-                },
-                {
-                    title: "Fast Refresh",
-                    url: "#",
-                },
-                {
-                    title: "Next.js Compiler",
-                    url: "#",
-                },
-                {
-                    title: "Supported Browsers",
-                    url: "#",
-                },
-                {
-                    title: "Turbopack",
-                    url: "#",
-                },
-            ],
-        },
-    ],
-};
+export const sidebarContent: SidebarGroup[] = [
+    {
+        title: "Getting Started",
+        url: "#",
+        items: [
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Installation",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Project Structure",
+                url: "#",
+            },
+        ],
+    },
+    {
+        title: "Building Your Application",
+        url: "#",
+        items: [
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Routing",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Data Fetching",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Rendering",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Caching",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Styling",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Optimizing",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                isActive: true,
+                title: "Configuring",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Testing",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Authentication",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Deploying",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Upgrading",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Examples",
+                url: "#",
+            },
+        ],
+    },
+    {
+        title: "API Reference",
+        url: "#",
+        items: [
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Components",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "File Conventions",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Functions",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "next.config.js Options",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "CLI",
+                url: "#",
+            },
+            {
+                icon: Pen,
+                hidden: false,
+                title: "Edge Runtime",
+                url: "#",
+            },
+        ],
+    },
+];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface Props {
+    body: Array<SidebarGroup>;
+    header?: () => React.JSX.Element;
+}
+
+interface SidebarGroup {
+    title: string;
+    url: string;
+    items: Array<{
+        icon: Icon;
+        title: string;
+        url: string;
+        hidden?: boolean;
+        isActive?: boolean;
+    }>;
+}
+
+export function AppSidebar({
+    body,
+    header,
+    ...props
+}: React.ComponentProps<typeof Sidebar> & Props) {
     return (
         <Sidebar {...props}>
-            <SidebarHeader>
-                <VersionSwitcher
-                    versions={data.versions}
-                    defaultVersion={data.versions[0]}
-                />
-                <SearchForm />
-            </SidebarHeader>
+            {header && <SidebarHeader>{header()}</SidebarHeader>}
             <SidebarContent>
                 {/* We create a SidebarGroup for each parent. */}
-                {data.navMain.map((item) => (
+                {body.map((item) => (
                     <SidebarGroup key={item.title}>
                         <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {item.items.map((item) => (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton
-                                            asChild
-                                            isActive={item.isActive}
-                                        >
-                                            <a href={item.url}>{item.title}</a>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))}
+                                {item.items
+                                    .filter((item) => !item.hidden)
+                                    .map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                className="ml-1"
+                                                isActive={item.isActive}
+                                            >
+                                                <Link
+                                                    href={item.url}
+                                                    className="flex"
+                                                >
+                                                    <item.icon className="size-4" />
+                                                    <span className="ml-2 text-content">
+                                                        {item.title}
+                                                    </span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>

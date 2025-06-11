@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import React from "react";
 
 // FCWC: FunctionComponentWithChildren
@@ -5,6 +6,8 @@ export type FCWC<T> = React.FC<React.PropsWithChildren<T>>;
 
 // Propless: Component without props
 export type Propless = {};
+
+export type Icon = typeof Link;
 
 export interface ChildNodeProps {
     children: React.ReactNode;

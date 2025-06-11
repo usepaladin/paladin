@@ -4,14 +4,14 @@ import { useProfile } from "@/hooks/useProfile";
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
-import { NavbarUserProfile, NavbarWrapper } from "./navbar.content";
+import { NavbarLogo, NavbarUserProfile, NavbarWrapper } from "./navbar.content";
 
 export const HomeNavbar = () => {
     const query = useProfile();
 
     return (
         <NavbarWrapper>
-            <div className="text-lg font-bold w-32">[Logo]</div>
+            <NavbarLogo href="/" />
             <HomeNavigation />
             <div className="flex w-auto flex-grow justify-end mr-2">
                 <NavbarUserProfile {...query} />
