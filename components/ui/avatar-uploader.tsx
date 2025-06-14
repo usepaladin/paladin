@@ -1,4 +1,5 @@
 import { imageUploadHelper } from "@/lib/util/image/image.util";
+import { cn } from "@/lib/util/utils";
 import { Upload } from "lucide-react";
 import Image from "next/image";
 import { FC, useRef } from "react";
@@ -12,6 +13,7 @@ interface AvatarUploaderProps {
     imageURL?: string;
     title?: string;
     submitButtonClass?: string;
+    imageContainerClass?: string;
 }
 
 export const AvatarUploader: FC<AvatarUploaderProps> = ({
@@ -19,7 +21,8 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
     imageURL,
     onRemove,
     submitButtonClass,
-    title = "Profile Picture",
+    imageContainerClass,
+    title,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,11 +45,16 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
 
     return (
         <section className="flex items-center mt-2">
-            <div className="mt-2 relative group/picture">
+            <div
+                className={cn(
+                    "mt-2 relative group/picture",
+                    imageContainerClass
+                )}
+            >
                 <div className="w-20 h-20 relative rounded-xl overflow-hidden">
                     {imageURL ? (
                         <Image
-                            alt="User Profile Picture"
+                            alt={title || "Uploaded Avatar Picture"}
                             className=""
                             src={imageURL}
                             fill

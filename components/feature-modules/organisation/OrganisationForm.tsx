@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/components/provider/AuthContext";
+import { AvatarUploader } from "@/components/ui/avatar-uploader";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -10,14 +11,34 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { createOrganisation } from "@/controller/organisation.controller";
-import { Organisation } from "@/lib/interfaces/organisation.interface";
+import { useProfile } from "@/hooks/useProfile";
+import {
+    OrganisationCreationRequest,
+    OrganisationMember,
+} from "@/lib/interfaces/organisation.interface";
+import { User } from "@/lib/interfaces/user.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SquareArrowOutUpRight } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -26,7 +47,7 @@ const OrganisationCreationFormSchema = z.object({
     displayName: z
         .string({ required_error: "Display Name is required" })
         .min(3, "Display Name is too short"),
-
+    avatarUrl: z.string().url().optional(),
     plan: z.enum(["ENTHUSIAST", "PRO", "TEAM", "ENTERPRISE"]),
 });
 
@@ -35,10 +56,44 @@ export type OrganisationCreation = z.infer<
 >;
 
 export const OrganisationForm = () => {
-    const { session } = useAuth();
+    const { session, client } = useAuth();
+    const { data: user } = useProfile();
     const toastRef = useRef<string | number | undefined>(undefined);
     const router = useRouter();
-    const client = useQueryClient();
+
+    const queryClient = useQueryClient();
+
+    const [uploadedAvatar, setUploadedAvatar] = useState<Blob | null>(null);
+    const handleSubmission = async (values: OrganisationCreation) => {
+        console.log("hey");
+        if (!session || !client) return;
+        //todo: Move to backend to upload avatar with organisation UUID after creation
+        // if (uploadedAvatar) {
+        //     const loadingToast = toast.loading("Uploading Avatar...");
+        //     const response = await handlePublicFileUpload(
+        //         client,
+        //         uploadedAvatar!,
+        //         "organisation-profile",
+        //         values.displayName,
+        //         true
+        //     );
+
+        //     toast.dismiss(loadingToast);
+
+        //     if (!response.ok) {
+        //         toast.error("Failed to upload Avatar");
+        //         return;
+        //     }
+        // }
+        const organisation: OrganisationCreationRequest = {
+            name: values.displayName,
+            avatarUrl: values.avatarUrl,
+            plan: values.plan,
+        };
+
+        // Create the organisation
+        organisationMutation.mutate(organisation);
+    };
 
     const organisationCreationForm: UseFormReturn<OrganisationCreation> =
         useForm<OrganisationCreation>({
@@ -50,7 +105,7 @@ export const OrganisationForm = () => {
         });
 
     const organisationMutation = useMutation({
-        mutationFn: (organisation: Organisation) =>
+        mutationFn: (organisation: OrganisationCreationRequest) =>
             createOrganisation(session, organisation),
         onMutate: () => {
             toastRef.current = toast.loading("Creating Organisation...");
@@ -58,7 +113,32 @@ export const OrganisationForm = () => {
         onSuccess: (data) => {
             toast.dismiss(toastRef.current);
             toast.success("Organisation created successfully");
-            router.push("/dashboard/organisation");
+
+            if (!user) {
+                router.push("/dashboard/organisation");
+                return;
+            }
+
+            const member: OrganisationMember = {
+                organisationId: data.id,
+                organisation: data,
+                user,
+                role: "OWNER",
+                memberSince: new Date().toISOString(),
+            };
+
+            queryClient.setQueryData(
+                ["userProfile", user.id],
+                (data: User | undefined) => {
+                    if (!data) return data;
+                    return {
+                        ...data,
+                        memerships: [...(data.memberships ?? []), member],
+                    };
+                }
+            );
+
+            
         },
         onError: (error) => {
             toast.dismiss(toastRef.current);
@@ -66,52 +146,150 @@ export const OrganisationForm = () => {
         },
     });
 
+    const handleAvatarUpload = async (image: File): Promise<void> => {
+        // Store transformed image ready for upload upon form submission
+        setUploadedAvatar(image);
+        // Set the avatar URL in the form state
+        const avatarURL = URL.createObjectURL(image);
+        organisationCreationForm.setValue("avatarUrl", avatarURL);
+    };
+
+    const handleAvatarRemoval = (): void => {
+        setUploadedAvatar(null);
+        organisationCreationForm.setValue("avatarUrl", undefined);
+    };
+
+    const handleCancel = () => {
+        router.push("/dashboard/organisation");
+    };
+
     return (
-        <Card className="min-w-xl">
-            <CardHeader>
-                <CardTitle>Create a new organisation</CardTitle>
-                <CardDescription>
-                    Enter your public display name for your organisation.
-                    <br />
-                    This name will be publically visible to all users when
-                    creating event routers.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form>
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                                required
+        <Card className="w-auto flex-grow lg:max-w-2xl h-fit m-2 md:m-6 lg:m-12">
+            <Form {...organisationCreationForm}>
+                <form
+                    onSubmit={organisationCreationForm.handleSubmit(
+                        handleSubmission
+                    )}
+                >
+                    <CardHeader>
+                        <CardTitle>Create a new organisation</CardTitle>
+                        <CardDescription>
+                            <br />
+                            Your organsation display name will be publically
+                            visible to all users when creating event routers.
+                            <br />
+                            Your display name will need to be unique.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-col space-y-6">
+                            <FormField
+                                control={organisationCreationForm.control}
+                                name="avatarUrl"
+                                render={(_) => (
+                                    <FormItem className="flex flex-col lg:flex-row w-full">
+                                        <FormLabel className="w-1/3">
+                                            Organisation Avatar
+                                        </FormLabel>
+                                        <AvatarUploader
+                                            onUpload={handleAvatarUpload}
+                                            imageURL={organisationCreationForm.getValues(
+                                                "avatarUrl"
+                                            )}
+                                            onRemove={handleAvatarRemoval}
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={organisationCreationForm.control}
+                                name="displayName"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col lg:flex-row w-full">
+                                        <FormLabel
+                                            className="w-1/3"
+                                            htmlFor="displayName"
+                                        >
+                                            Organisation Name
+                                        </FormLabel>
+                                        <Input
+                                            id="displayName"
+                                            placeholder="My Organisation"
+                                            className="w-auto mt-2 flex-grow"
+                                            {...field}
+                                            required
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={organisationCreationForm.control}
+                                name="plan"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col lg:flex-row">
+                                        <div className="w-full md:w-1/3">
+                                            <FormLabel htmlFor="plan">
+                                                Organisation Plan
+                                            </FormLabel>
+                                            <Link
+                                                href={"/pricing"}
+                                                target="_blank"
+                                                className="text-xs text-content flex items-center w-fit h-fit mt-2 hover:opacity-50 transition-opacity"
+                                            >
+                                                Pricing
+                                                <SquareArrowOutUpRight className="w-3 h-3 ml-1" />
+                                            </Link>
+                                        </div>
+                                        <Select
+                                            defaultValue={field.value}
+                                            onValueChange={field.onChange}
+                                        >
+                                            <FormControl className="flex flex-grow w-auto mt-2">
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select an organisation plan" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="ENTHUSIAST">
+                                                    Enthusiast
+                                                </SelectItem>
+                                                <SelectItem value="PRO">
+                                                    Pro
+                                                </SelectItem>
+                                                <SelectItem value="TEAM">
+                                                    Team
+                                                </SelectItem>
+                                                <SelectItem value="ENTERPRISE">
+                                                    Enterprise
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
                             />
                         </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
-                                <a
-                                    href="#"
-                                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                                >
-                                    Forgot your password?
-                                </a>
-                            </div>
-                            <Input id="password" type="password" required />
-                        </div>
-                    </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-between mt-4 py-1 border-t ">
+                        <Button
+                            type="button"
+                            className="cursor-pointer"
+                            onClick={handleCancel}
+                            variant={"outline"}
+                            size={"sm"}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            size={"sm"}
+                            className="cursor-pointer"
+                        >
+                            Create Organisation
+                        </Button>
+                    </CardFooter>
                 </form>
-            </CardContent>
-            <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full">
-                    Login
-                </Button>
-                <Button variant="outline" className="w-full">
-                    Login with Google
-                </Button>
-            </CardFooter>
+            </Form>
         </Card>
     );
 };

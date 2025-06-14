@@ -2,7 +2,7 @@ import { OrganisationForm } from "@/components/feature-modules/organisation/Orga
 
 const page = () => {
     return (
-        <div className="w-full h-full flex justify-center p-12">
+        <div className="w-full h-full flex justify-center">
             <OrganisationForm />
         </div>
     );

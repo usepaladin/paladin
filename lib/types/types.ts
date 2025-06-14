@@ -220,6 +220,7 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
+            avatarUrl?: string;
             /** @enum {string} */
             plan: "ENTHUSIAST" | "PRO" | "TEAM" | "ENTERPRISE";
             /** Format: int32 */
@@ -275,6 +276,12 @@ export interface components {
             role: "OWNER" | "ADMIN" | "DEVELOPER" | "READONLY";
             /** @enum {string} */
             status: "PENDING" | "ACCEPTED" | "DECLINED" | "EXPIRED";
+        };
+        OrganisationCreationRequest: {
+            name: string;
+            avatarUrl?: string;
+            /** @enum {string} */
+            plan: "ENTHUSIAST" | "PRO" | "TEAM" | "ENTERPRISE";
         };
     };
     responses: never;
@@ -389,7 +396,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["Organisation"];
+                "application/json": components["schemas"]["OrganisationCreationRequest"];
             };
         };
         responses: {

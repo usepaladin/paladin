@@ -6,6 +6,10 @@ export type Organisation = components["schemas"]["Organisation"];
 export type OrganisationMember = components["schemas"]["OrganisationMember"];
 export type OrganisationInvite = components["schemas"]["OrganisationInvite"];
 
+// -- - 🔗 API Request Models ---
+export type OrganisationCreationRequest =
+    components["schemas"]["OrganisationCreationRequest"];
+
 // --- 📦 Request Payloads ---
 export type CreateOrganisationRequest =
     operations["createOrganisation"]["requestBody"]["content"]["application/json"];
