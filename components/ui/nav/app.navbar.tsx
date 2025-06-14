@@ -6,7 +6,6 @@ import { NavbarLogo, NavbarUserProfile, NavbarWrapper } from "./navbar.content";
 
 export const AppNavbar = () => {
     const query = useProfile();
-
     return (
         <NavbarWrapper>
             <SidebarTrigger className="mr-4 cursor-pointer" />

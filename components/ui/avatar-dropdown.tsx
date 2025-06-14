@@ -54,7 +54,7 @@ export const UserProfileDropdown: FC<Props> = ({ user }) => {
                     </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48 mx-4">
+            <DropdownMenuContent className="px-2 mx-4 mt-1">
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="pointer-events-none">
                         <UserIcon />
@@ -87,7 +87,7 @@ export const UserProfileDropdown: FC<Props> = ({ user }) => {
                         <span
                             className="ml-2 text-xs text-content"
                             onClick={() =>
-                                router.push("/dashboard/organisations")
+                                router.push("/dashboard/organisation")
                             }
                         >
                             All Organisations

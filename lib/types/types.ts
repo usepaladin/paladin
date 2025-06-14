@@ -282,6 +282,7 @@ export interface components {
             avatarUrl?: string;
             /** @enum {string} */
             plan: "ENTHUSIAST" | "PRO" | "TEAM" | "ENTERPRISE";
+            default: boolean;
         };
     };
     responses: never;

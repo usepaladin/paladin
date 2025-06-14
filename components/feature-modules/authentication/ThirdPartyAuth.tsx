@@ -37,7 +37,7 @@ const ThirdParty: React.FC<ThirdPartyProps> = ({
                 <Button
                     onClick={async () => await handleAuth("github")}
                     variant={"outline"}
-                    className="w-full font-semibold relative"
+                    className="w-full relative"
                 >
                     <FaGithub className={cn("text-base", iconClass)} />
                     <span className="ml-2">GitHub</span>
@@ -45,7 +45,7 @@ const ThirdParty: React.FC<ThirdPartyProps> = ({
                 <Button
                     onClick={async () => await handleAuth("google")}
                     variant={"outline"}
-                    className="w-full font-semibold relative"
+                    className="w-full relative"
                 >
                     <FaGoogle className={cn("text-base", iconClass)} />
                     <span className="ml-2">Google</span>

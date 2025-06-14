@@ -11,6 +11,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Form,
     FormControl,
@@ -32,7 +33,6 @@ import {
     OrganisationCreationRequest,
     OrganisationMember,
 } from "@/lib/interfaces/organisation.interface";
-import { User } from "@/lib/interfaces/user.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SquareArrowOutUpRight } from "lucide-react";
@@ -48,6 +48,7 @@ const OrganisationCreationFormSchema = z.object({
         .string({ required_error: "Display Name is required" })
         .min(3, "Display Name is too short"),
     avatarUrl: z.string().url().optional(),
+    default: z.boolean(),
     plan: z.enum(["ENTHUSIAST", "PRO", "TEAM", "ENTERPRISE"]),
 });
 
@@ -65,7 +66,6 @@ export const OrganisationForm = () => {
 
     const [uploadedAvatar, setUploadedAvatar] = useState<Blob | null>(null);
     const handleSubmission = async (values: OrganisationCreation) => {
-        console.log("hey");
         if (!session || !client) return;
         //todo: Move to backend to upload avatar with organisation UUID after creation
         // if (uploadedAvatar) {
@@ -89,6 +89,7 @@ export const OrganisationForm = () => {
             name: values.displayName,
             avatarUrl: values.avatarUrl,
             plan: values.plan,
+            default: values.default,
         };
 
         // Create the organisation
@@ -101,6 +102,8 @@ export const OrganisationForm = () => {
             defaultValues: {
                 displayName: "",
                 plan: "ENTHUSIAST", // Default plan
+                avatarUrl: undefined, // No avatar by default
+                default: user?.memberships.length === 0, // Default to false unless user has no memberships
             },
         });
 
@@ -110,7 +113,7 @@ export const OrganisationForm = () => {
         onMutate: () => {
             toastRef.current = toast.loading("Creating Organisation...");
         },
-        onSuccess: (data) => {
+        onSuccess: (organisation) => {
             toast.dismiss(toastRef.current);
             toast.success("Organisation created successfully");
 
@@ -120,25 +123,17 @@ export const OrganisationForm = () => {
             }
 
             const member: OrganisationMember = {
-                organisationId: data.id,
-                organisation: data,
+                organisationId: organisation.id,
+                organisation: organisation,
                 user,
                 role: "OWNER",
                 memberSince: new Date().toISOString(),
             };
 
-            queryClient.setQueryData(
-                ["userProfile", user.id],
-                (data: User | undefined) => {
-                    if (!data) return data;
-                    return {
-                        ...data,
-                        memerships: [...(data.memberships ?? []), member],
-                    };
-                }
-            );
-
-            
+            queryClient.invalidateQueries({
+                queryKey: ["userProfile", user.id],
+            });
+            router.push("/dashboard/organisation");
         },
         onError: (error) => {
             toast.dismiss(toastRef.current);
@@ -205,7 +200,7 @@ export const OrganisationForm = () => {
                                 control={organisationCreationForm.control}
                                 name="displayName"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-col lg:flex-row w-full">
+                                    <FormItem className="flex mt-2 flex-col lg:flex-row w-full">
                                         <FormLabel
                                             className="w-1/3"
                                             htmlFor="displayName"
@@ -215,7 +210,7 @@ export const OrganisationForm = () => {
                                         <Input
                                             id="displayName"
                                             placeholder="My Organisation"
-                                            className="w-auto mt-2 flex-grow"
+                                            className="w-auto flex-grow"
                                             {...field}
                                             required
                                         />
@@ -227,8 +222,8 @@ export const OrganisationForm = () => {
                                 control={organisationCreationForm.control}
                                 name="plan"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-col lg:flex-row">
-                                        <div className="w-full md:w-1/3">
+                                    <FormItem className="flex items-center mt-2 flex-col lg:flex-row">
+                                        <div className="w-full md:w-1/3 mt-2">
                                             <FormLabel htmlFor="plan">
                                                 Organisation Plan
                                             </FormLabel>
@@ -260,11 +255,31 @@ export const OrganisationForm = () => {
                                                 <SelectItem value="TEAM">
                                                     Team
                                                 </SelectItem>
-                                                <SelectItem value="ENTERPRISE">
-                                                    Enterprise
-                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={organisationCreationForm.control}
+                                name="default"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-end gap-2 mt-4 mb-2">
+                                        <FormControl>
+                                            <Checkbox
+                                                disabled={
+                                                    user?.memberships.length ===
+                                                    0
+                                                }
+                                                checked={field.value}
+                                                onCheckedChange={(checked) => {
+                                                    field.onChange(checked);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormLabel className="text-sm font-normal">
+                                            Set as default organisation
+                                        </FormLabel>
                                     </FormItem>
                                 )}
                             />

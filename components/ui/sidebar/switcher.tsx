@@ -1,6 +1,11 @@
 "use client";
 
-import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
+import {
+    Check,
+    ChevronsUpDown,
+    GalleryVerticalEnd,
+    PlusCircle,
+} from "lucide-react";
 
 import {
     DropdownMenu,
@@ -13,6 +18,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 import { JSX, useState } from "react";
 
 interface Choice {
@@ -24,6 +30,8 @@ interface Props<T extends Choice> {
     render: (value: T) => JSX.Element;
     options: T[];
     defaultOption?: T;
+    addNewLink?: string;
+    addNewTitle?: string;
 }
 
 export const OptionSwitcher = <T extends Choice>({
@@ -31,8 +39,11 @@ export const OptionSwitcher = <T extends Choice>({
     defaultOption,
     render,
     title,
+    addNewLink,
+    addNewTitle = "Add New",
 }: Props<T>) => {
     const [selectedOption, setSelectedOption] = useState(defaultOption);
+    const router = useRouter();
 
     return (
         <SidebarMenu>
@@ -47,7 +58,7 @@ export const OptionSwitcher = <T extends Choice>({
                                 <GalleryVerticalEnd className="size-4" />
                             </div>
                             {selectedOption && (
-                                <div className="flex flex-col gap-0.5 leading-none">
+                                <div className="flex flex-col gap-0.5 leading-none text-xs">
                                     <span className="font-semibold">
                                         {title}
                                     </span>
@@ -58,12 +69,13 @@ export const OptionSwitcher = <T extends Choice>({
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-[--radix-dropdown-menu-trigger-width]"
+                        className="w-[15rem] mt-2"
                         align="start"
                     >
                         {options.map((option) => (
                             <DropdownMenuItem
                                 key={option.id}
+                                className="text-xs"
                                 onSelect={() => setSelectedOption(option)}
                             >
                                 {render(option)}
@@ -72,6 +84,19 @@ export const OptionSwitcher = <T extends Choice>({
                                 )}
                             </DropdownMenuItem>
                         ))}
+                        {addNewLink && (
+                            <DropdownMenuItem
+                                className="border-t rounded-none mt-1 pt-2"
+                                onSelect={() => {
+                                    router.push(addNewLink);
+                                }}
+                            >
+                                <PlusCircle className="mr-1 size-4" />
+                                <span className="text-content text-xs">
+                                    {addNewTitle}
+                                </span>
+                            </DropdownMenuItem>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

@@ -31,6 +31,17 @@ export const getInitials = (name: string): string => {
     return initials.join("");
 };
 
+export const toTitleCase = (value: string | null | undefined): string => {
+    if (!value) return "";
+
+    return value
+        .split(" ")
+        .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(" ");
+};
+
 export const allNotNull = <T>(
     values: (T | null)[]
 ): values is NonNullable<T>[] => {

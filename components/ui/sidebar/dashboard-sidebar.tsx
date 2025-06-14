@@ -8,7 +8,6 @@ import { OptionSwitcher } from "./switcher";
 
 export const DashboardSidebar = () => {
     const { data, isLoading, isError } = useProfile();
-
     return (
         <AppSidebar
             header={() => {
@@ -37,6 +36,8 @@ export const DashboardSidebar = () => {
                     }
                     return (
                         <OptionSwitcher
+                            addNewLink="/dashboard/organisation/new"
+                            addNewTitle="Create Organisation"
                             title={"Organisations"}
                             options={
                                 data.memberships

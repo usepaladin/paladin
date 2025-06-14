@@ -68,15 +68,17 @@ const LoginForm: FC<AuthenticationProps> = ({ callbacks }) => {
     return (
         <>
             <CardHeader className="pb-0">
-                <h1 className="text-xl lg:text-2xl font-bold">Welcome Back</h1>
-                <h2 className=" font-semibold text-neutral-500 dark:text-neutral-400">
+                <h1 className="font-semibold text-xl lg:text-2xl">
+                    Welcome Back
+                </h1>
+                <h2 className=" text-neutral-500 dark:text-neutral-400">
                     Login into your account
                 </h2>
             </CardHeader>
             <CardContent>
                 <Form {...loginForm}>
                     <form
-                        className="w-full md:w-[25rem] mt-6"
+                        className="w-full md:w-[25rem]"
                         onSubmit={loginForm.handleSubmit(handleLoginSubmission)}
                     >
                         <FormField

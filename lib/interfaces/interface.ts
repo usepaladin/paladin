@@ -1,3 +1,4 @@
+import { UseQueryResult } from "@tanstack/react-query";
 import { Link } from "lucide-react";
 import React from "react";
 
@@ -21,6 +22,11 @@ export interface SupabaseClientResponse<T extends Error, V = unknown> {
     ok: boolean;
     data?: V;
     error?: T;
+}
+
+export interface Query<T extends object> {
+    query: UseQueryResult<T>;
+    isEnabled?: boolean;
 }
 
 export interface ControllerResponse<T> {
