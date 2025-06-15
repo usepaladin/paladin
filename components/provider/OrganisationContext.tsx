@@ -16,13 +16,8 @@ import { useStore } from "zustand";
 
 type OrganisationStoreApi = ReturnType<typeof createOrganisationStore>;
 
-interface OrganisationStoreContext extends Partial<OrganisationStoreApi> {
-    store?: OrganisationStoreApi;
-    loadingUser: boolean;
-}
-
 export const OrganisationsStoreContext = createContext<
-    OrganisationStoreContext | undefined
+    OrganisationStoreApi | undefined
 >(undefined);
 
 export interface OrganisationsStoreProviderProps {
@@ -32,23 +27,41 @@ export interface OrganisationsStoreProviderProps {
 export const OrganisationsStoreProvider = ({
     children,
 }: OrganisationsStoreProviderProps) => {
-    const { data: user, isLoadingAuth, isPending } = useProfile();
+    const { data: user } = useProfile();
     const store = useRef<OrganisationStoreApi | undefined>(undefined);
+
+    if (!store.current) {
+        store.current = createOrganisationStore();
+    }
 
     useEffect(() => {
         if (!user) return;
-        if (!store.current) {
-            store.current = createOrganisationStore(user);
+        const selectedOrganisationId = localStorage.getItem(
+            "selectedOrganisation"
+        );
+        if (selectedOrganisationId) {
+            const selectedOrganisation = user.memberships.find(
+                (m) => m.organisation?.id === selectedOrganisationId
+            )?.organisation;
+
+            if (selectedOrganisation) {
+                store.current?.setState({
+                    seletedOrganisationId: selectedOrganisation.id,
+                });
+            }
+        } else {
+            // If no organisation is selected, set the first one as default
+            const firstOrganisation = user.memberships[0]?.organisation;
+            if (firstOrganisation) {
+                store.current?.setState({
+                    seletedOrganisationId: firstOrganisation.id,
+                });
+            }
         }
     }, [user]);
 
     return (
-        <OrganisationsStoreContext.Provider
-            value={{
-                store: store.current,
-                loadingUser: isLoadingAuth || isPending,
-            }}
-        >
+        <OrganisationsStoreContext.Provider value={store.current}>
             {children}
         </OrganisationsStoreContext.Provider>
     );
@@ -56,24 +69,13 @@ export const OrganisationsStoreProvider = ({
 
 export const useOrganisationStore = <T,>(
     selector: (store: OrganisationStore) => T
-) => {
+): T | undefined => {
     const context = useContext(OrganisationsStoreContext);
 
     if (!context) {
         throw new Error(
-            "useOrganisationsStore must be used within a OrganisationsStoreProvider"
+            "useOrganisationStore must be used within a OrganisationsStoreProvider"
         );
     }
-
-    if (!context.store)
-        return {
-            loading: context.loadingUser,
-            store: undefined,
-        };
-
-    const store = useStore(context.store, selector);
-    return {
-        store: store,
-        loading: context.loadingUser,
-    };
+    return useStore(context, selector);
 };

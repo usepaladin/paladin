@@ -19,7 +19,7 @@ export const OrganisationTile: FC<Props> = ({ membership }) => {
 
     return (
         <Card className="p-3 cursor-pointer hover:bg-card/60 rounded-md">
-            <Link href={`organisation/${organisation.name}}`}>
+            <Link href={`organisation/${organisation.id}}`}>
                 <CardContent className="px-2 w-72">
                     <section className="flex">
                         <div className="relative w-10 h-10 overflow-hidden rounded-md bg-background/60 border mr-4">

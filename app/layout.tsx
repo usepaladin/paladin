@@ -46,15 +46,15 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <QueryClientWrapper>
-                        <StoreProviderWrapper>
-                            <AuthProvider>
+                    <AuthProvider>
+                        <QueryClientWrapper>
+                            <StoreProviderWrapper>
                                 <OnboardWrapper>
                                     <main className="w-full">{children}</main>
                                 </OnboardWrapper>
-                            </AuthProvider>
-                        </StoreProviderWrapper>
-                    </QueryClientWrapper>
+                            </StoreProviderWrapper>
+                        </QueryClientWrapper>
+                    </AuthProvider>
                 </ThemeProvider>
                 <Toaster richColors />
             </body>

@@ -19,8 +19,6 @@ const page = () => {
     const [renderedOrganisations, setRenderedOrganisations] = useState<
         OrganisationMember[]
     >(user?.memberships ?? []);
-    console.log(session);
-    console.log(user);
     useEffect(() => {
         if (user?.memberships) {
             setRenderedOrganisations(
