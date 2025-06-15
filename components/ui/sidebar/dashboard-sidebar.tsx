@@ -1,4 +1,5 @@
 "use client";
+import { useOrganisationStore } from "@/components/provider/OrganisationContext";
 import { useProfile } from "@/hooks/useProfile";
 import Link from "next/link";
 import { Button } from "../button";
@@ -7,11 +8,13 @@ import { AppSidebar, sidebarContent } from "./root-sidebar";
 import { OptionSwitcher } from "./switcher";
 
 export const DashboardSidebar = () => {
-    const { data, isLoading, isError } = useProfile();
+    const { data, isPending, isLoadingAuth } = useProfile();
+    const { loading, store } = useOrganisationStore((store) => store);
+
     return (
         <AppSidebar
             header={() => {
-                if (isLoading || !data) {
+                if (isLoadingAuth || isPending) {
                     return (
                         <Skeleton className="w-auto flex-grow flex h-8 mt-3 mx-4 " />
                     );
@@ -44,7 +47,6 @@ export const DashboardSidebar = () => {
                                     .map((org) => org.organisation)
                                     .filter((org) => !!org) ?? []
                             }
-                            defaultOption={data.defaultOrganisation}
                             render={(org) => <span>{org.name}</span>}
                         />
                     );

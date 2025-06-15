@@ -29,20 +29,21 @@ interface Props<T extends Choice> {
     title: String;
     render: (value: T) => JSX.Element;
     options: T[];
-    defaultOption?: T;
+    selectedOption: T | null;
+    handleOptionSelection: (value: T) => void;
     addNewLink?: string;
     addNewTitle?: string;
 }
 
 export const OptionSwitcher = <T extends Choice>({
     options,
-    defaultOption,
+    selectedOption,
+    handleOptionSelection,
     render,
     title,
     addNewLink,
     addNewTitle = "Add New",
 }: Props<T>) => {
-    const [selectedOption, setSelectedOption] = useState(defaultOption);
     const router = useRouter();
 
     return (
@@ -76,7 +77,7 @@ export const OptionSwitcher = <T extends Choice>({
                             <DropdownMenuItem
                                 key={option.id}
                                 className="text-xs"
-                                onSelect={() => setSelectedOption(option)}
+                                onSelect={() => handleOptionSelection(option)}
                             >
                                 {render(option)}
                                 {option.id === selectedOption?.id && (
