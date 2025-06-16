@@ -1,12 +1,7 @@
-"use client";
-
-import { useOrganisation } from "@/hooks/useOrganisation";
+import { OrganisationDashboard } from "@/components/feature-modules/organisation/dashboard/OrganisationDashboard";
 
 const page = () => {
-    const { data, isPending, isError, error } = useOrganisation();
-
-    console.log(data);
-    return <div>page</div>;
+    return <OrganisationDashboard />;
 };
 
 export default page;
