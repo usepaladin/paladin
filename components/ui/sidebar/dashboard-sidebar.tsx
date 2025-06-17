@@ -27,6 +27,7 @@ import { OptionSwitcher } from "./switcher";
 export const DashboardSidebar = () => {
     const router = useRouter();
     const pathName = usePathname();
+    console.log(pathName);
 
     const { data, isPending, isLoadingAuth } = useProfile();
     const [selectedOrganisation, setSelectedOrganisation] = useState<Organisation | null>(null);
@@ -59,18 +60,26 @@ export const DashboardSidebar = () => {
                           hidden: false,
                           title: "Overview",
                           url: `/dashboard/organisation/${selectedOrganisation.id}`,
+                          isActive:
+                              pathName === `/dashboard/organisation/${selectedOrganisation.id}`,
                       },
                       {
                           icon: Users,
                           hidden: false,
                           title: "Members",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/members`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/members`
+                          ),
                       },
                       {
                           icon: Users,
                           hidden: false,
                           title: "Invites",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/invites`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/invites`
+                          ),
                       },
                   ],
               },
@@ -82,24 +91,36 @@ export const DashboardSidebar = () => {
                           hidden: false,
                           title: "Event Router",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/router`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/router`
+                          ),
                       },
                       {
                           icon: ChevronsLeftRightEllipsis,
                           hidden: false,
                           title: "Event Proxy",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/proxy`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/proxy`
+                          ),
                       },
                       {
                           icon: TextSearch,
                           hidden: false,
                           title: "Event Websocket Stream",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/stream`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/stream`
+                          ),
                       },
                       {
                           icon: DatabaseBackup,
                           hidden: false,
                           title: "Database Discovery",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/database`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/database`
+                          ),
                       },
                   ],
               },
@@ -111,12 +132,18 @@ export const DashboardSidebar = () => {
                           hidden: false,
                           title: "Cluster/Brokers",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/configuration`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/configuration`
+                          ),
                       },
                       {
                           icon: Computer,
                           hidden: false,
                           title: "Compute and Processing",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/compute`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/compute`
+                          ),
                       },
                   ],
               },
@@ -128,12 +155,18 @@ export const DashboardSidebar = () => {
                           hidden: false,
                           title: "Subscription",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/subscriptions`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/subscriptions`
+                          ),
                       },
                       {
                           icon: TrendingUpDown,
                           hidden: false,
                           title: "Usage",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/usage`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/usage`
+                          ),
                       },
                   ],
               },
@@ -143,8 +176,11 @@ export const DashboardSidebar = () => {
                       {
                           icon: CogIcon,
                           hidden: false,
-                          title: "Components",
+                          title: "Settings",
                           url: `/dashboard/organisation/${selectedOrganisation.id}/settings`,
+                          isActive: pathName.startsWith(
+                              `/dashboard/organisation/${selectedOrganisation.id}/settings`
+                          ),
                       },
                   ],
               },
