@@ -40,3 +40,14 @@ export interface FormFieldProps<T> {
     onChange: (value: T) => void;
     onBlur?: () => void;
 }
+
+export interface SidebarGroupProps {
+    title: string;
+    items: Array<{
+        icon: Icon;
+        title: string;
+        url: string;
+        hidden?: boolean;
+        isActive?: boolean;
+    }>;
+}

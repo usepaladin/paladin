@@ -1,7 +1,6 @@
 "use client";
 
 import { OrganisationTile } from "@/components/feature-modules/organisation/OrganisationTile";
-import { useAuth } from "@/components/provider/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useProfile } from "@/hooks/useProfile";
@@ -11,14 +10,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const page = () => {
-    const { session } = useAuth();
-    const { data: user, isError, isPending } = useProfile();
-    const [organisationSearch, setOrganisationSearch] = useState<
-        string | undefined
-    >();
-    const [renderedOrganisations, setRenderedOrganisations] = useState<
-        OrganisationMember[]
-    >(user?.memberships ?? []);
+    const { data: user, isPending } = useProfile();
+    const [organisationSearch, setOrganisationSearch] = useState<string | undefined>();
+    const [renderedOrganisations, setRenderedOrganisations] = useState<OrganisationMember[]>(
+        user?.memberships ?? []
+    );
     useEffect(() => {
         if (user?.memberships) {
             setRenderedOrganisations(
@@ -38,11 +34,7 @@ const page = () => {
             <h1 className="text-2xl text-content">Your Organisations</h1>
             <section className="flex mt-6 space-x-4">
                 <Link href={"organisation/new"}>
-                    <Button
-                        variant={"outline"}
-                        size={"sm"}
-                        className="h-full cursor-pointer"
-                    >
+                    <Button variant={"outline"} size={"sm"} className="h-full cursor-pointer">
                         <PlusCircle className="mr-2" />
                         Create Organisation
                     </Button>
@@ -72,10 +64,7 @@ const page = () => {
                             <OrganisationTile
                                 key={org.organisationId}
                                 membership={org}
-                                isDefault={
-                                    user?.defaultOrganisation?.id ===
-                                    org.organisationId
-                                }
+                                isDefault={user?.defaultOrganisation?.id === org.organisationId}
                             />
                         ))}
                     </>

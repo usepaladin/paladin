@@ -1,15 +1,16 @@
 "use client";
 
+import { useOrganisationStore } from "@/components/provider/OrganisationContext";
 import { useOrganisation } from "@/hooks/useOrganisation";
 import { isResponseError, ResponseError } from "@/lib/util/error/error.util";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { OrganisationAnalytics } from "./OrganisationAnalytics";
 import { OrganisationHeader } from "./OrganisationHeader";
 
 export const OrganisationDashboard = () => {
-    const { data, isPending, isError, error, isLoadingAuth } =
-        useOrganisation();
+    const { data, isPending, isError, error, isLoadingAuth } = useOrganisation();
+    const selectedOrganisationId = useOrganisationStore((store) => store.selectedOrganisationId);
+    const setSelectedOrganisation = useOrganisationStore((store) => store.setSelectedOrganisation);
     const router = useRouter();
 
     useEffect(() => {
@@ -23,7 +24,13 @@ export const OrganisationDashboard = () => {
             const responseError = error as ResponseError;
             router.push(`/dashboard/organisation?error=${responseError.error}`);
         }
-    }, [isPending, isLoadingAuth, data]);
+    }, [isPending, isLoadingAuth, data, error, router]);
+
+    useEffect(() => {
+        if (!data || !setSelectedOrganisation) return;
+        if (selectedOrganisationId === data.id) return;
+        setSelectedOrganisation(data); // Pass the full Organisation object
+    }, [data, selectedOrganisationId, setSelectedOrganisation]);
 
     if (isPending || isLoadingAuth) {
         return <div>Loading...</div>;
@@ -34,7 +41,6 @@ export const OrganisationDashboard = () => {
     return (
         <>
             <OrganisationHeader organisation={data} />
-            <OrganisationAnalytics />
         </>
     );
 };

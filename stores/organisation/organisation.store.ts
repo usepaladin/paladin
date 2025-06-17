@@ -2,7 +2,7 @@ import { Organisation } from "@/lib/interfaces/organisation.interface";
 import { createStore } from "zustand";
 
 type OrganisationState = {
-    seletedOrganisationId?: string;
+    selectedOrganisationId?: string;
 };
 
 type OrganisationActions = {
@@ -12,12 +12,10 @@ type OrganisationActions = {
 export type OrganisationStore = OrganisationState & OrganisationActions;
 
 export const organisationInitState: OrganisationState = {
-    seletedOrganisationId: undefined,
+    selectedOrganisationId: undefined,
 };
 
-export const createOrganisationStore = (
-    initState: OrganisationState = organisationInitState
-) => {
+export const createOrganisationStore = (initState: OrganisationState = organisationInitState) => {
     return createStore<OrganisationStore>()((set) => ({
         ...initState,
         setSelectedOrganisation: (organisation: Organisation) =>
@@ -25,7 +23,7 @@ export const createOrganisationStore = (
                 localStorage.setItem("selectedOrganisation", organisation.id);
                 return {
                     ...state,
-                    seletedOrganisationId: organisation.id,
+                    selectedOrganisationId: organisation.id,
                 };
             }),
     }));

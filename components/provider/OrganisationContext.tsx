@@ -5,28 +5,18 @@ import {
     createOrganisationStore,
     type OrganisationStore,
 } from "@/stores/organisation/organisation.store";
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
 import { useStore } from "zustand";
 
 type OrganisationStoreApi = ReturnType<typeof createOrganisationStore>;
 
-export const OrganisationsStoreContext = createContext<
-    OrganisationStoreApi | undefined
->(undefined);
+export const OrganisationsStoreContext = createContext<OrganisationStoreApi | undefined>(undefined);
 
 export interface OrganisationsStoreProviderProps {
     children: ReactNode;
 }
 
-export const OrganisationsStoreProvider = ({
-    children,
-}: OrganisationsStoreProviderProps) => {
+export const OrganisationsStoreProvider = ({ children }: OrganisationsStoreProviderProps) => {
     const { data: user } = useProfile();
     const store = useRef<OrganisationStoreApi | undefined>(undefined);
 
@@ -36,9 +26,7 @@ export const OrganisationsStoreProvider = ({
 
     useEffect(() => {
         if (!user) return;
-        const selectedOrganisationId = localStorage.getItem(
-            "selectedOrganisation"
-        );
+        const selectedOrganisationId = localStorage.getItem("selectedOrganisation");
         if (selectedOrganisationId) {
             const selectedOrganisation = user.memberships.find(
                 (m) => m.organisation?.id === selectedOrganisationId
@@ -46,7 +34,7 @@ export const OrganisationsStoreProvider = ({
 
             if (selectedOrganisation) {
                 store.current?.setState({
-                    seletedOrganisationId: selectedOrganisation.id,
+                    selectedOrganisationId: selectedOrganisation.id,
                 });
             }
         } else {
@@ -54,7 +42,7 @@ export const OrganisationsStoreProvider = ({
             const firstOrganisation = user.memberships[0]?.organisation;
             if (firstOrganisation) {
                 store.current?.setState({
-                    seletedOrganisationId: firstOrganisation.id,
+                    selectedOrganisationId: firstOrganisation.id,
                 });
             }
         }
@@ -71,11 +59,9 @@ export const useOrganisationStore = <T,>(
     selector: (store: OrganisationStore) => T
 ): T | undefined => {
     const context = useContext(OrganisationsStoreContext);
-
+    
     if (!context) {
-        throw new Error(
-            "useOrganisationStore must be used within a OrganisationsStoreProvider"
-        );
+        throw new Error("useOrganisationStore must be used within a OrganisationsStoreProvider");
     }
     return useStore(context, selector);
 };
