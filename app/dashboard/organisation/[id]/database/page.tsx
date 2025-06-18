@@ -1,3 +1,5 @@
-export const page = () => {
+const Database = () => {
     return <div>page</div>;
 };
+
+export default Database

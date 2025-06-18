@@ -1,4 +1,4 @@
-const page = () => {
+const Settings = () => {
     return <div></div>;
 };
 

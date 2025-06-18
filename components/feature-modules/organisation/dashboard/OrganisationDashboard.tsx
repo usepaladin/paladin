@@ -18,6 +18,7 @@ export const OrganisationDashboard = () => {
         if (!isPending && !isLoadingAuth && !data) {
             if (!error || !isResponseError(error)) {
                 router.push("/dashboard/organisation/");
+                return;
             }
 
             // Query has returned an ID we can use to route to a valid error message

@@ -2,7 +2,7 @@ import { imageUploadHelper } from "@/lib/util/image/image.util";
 import { cn } from "@/lib/util/utils";
 import { Upload } from "lucide-react";
 import Image from "next/image";
-import { FC, useRef } from "react";
+import { FC, useId, useRef } from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
@@ -25,6 +25,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
     title,
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const inputId = useId();
 
     const handleImageChangeEvent = imageUploadHelper({
         handleUpload: onUpload,
@@ -45,12 +46,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
 
     return (
         <section className="flex items-center mt-2">
-            <div
-                className={cn(
-                    "mt-2 relative group/picture",
-                    imageContainerClass
-                )}
-            >
+            <div className={cn("mt-2 relative group/picture", imageContainerClass)}>
                 <div className="w-20 h-20 relative rounded-xl overflow-hidden">
                     {imageURL ? (
                         <Image
@@ -70,13 +66,13 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
                 <Input
                     ref={inputRef}
                     onChange={handleImageChangeEvent}
-                    id="picture"
+                    id={inputId}
                     className="w-full mt-6 absolute hidden"
                     accept="image/*"
                     type="file"
                 />
                 <label
-                    htmlFor="picture"
+                    htmlFor={inputId}
                     className="absolute top-0 w-full  h-full  bg-neutral-900/50 dark:bg-neutral-950/70 opacity-0 group-hover/picture:opacity-100 cursor-pointer transition-opacity flex items-center text-center left-0"
                 >
                     Upload Picture
@@ -95,11 +91,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
                         <Upload className="w-4 h-4" />
                         <span>Upload Picture</span>
                     </Button>
-                    <Button
-                        type="button"
-                        onClick={handleRemoveImage}
-                        variant={"destructive"}
-                    >
+                    <Button type="button" onClick={handleRemoveImage} variant={"destructive"}>
                         Remove
                     </Button>
                 </div>

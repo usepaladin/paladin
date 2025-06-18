@@ -1,5 +1,5 @@
-const page = () => {
+const Stream = () => {
     return <div></div>;
 };
 
-export default page;
+export default Stream;

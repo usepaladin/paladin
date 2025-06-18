@@ -12,13 +12,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -48,13 +42,11 @@ const OrganisationCreationFormSchema = z.object({
         .string({ required_error: "Display Name is required" })
         .min(3, "Display Name is too short"),
     avatarUrl: z.string().url().optional(),
-    default: z.boolean(),
+    isDefault: z.boolean(),
     plan: z.enum(["ENTHUSIAST", "PRO", "TEAM", "ENTERPRISE"]),
 });
 
-export type OrganisationCreation = z.infer<
-    typeof OrganisationCreationFormSchema
->;
+export type OrganisationCreation = z.infer<typeof OrganisationCreationFormSchema>;
 
 export const OrganisationForm = () => {
     const { session, client } = useAuth();
@@ -89,7 +81,7 @@ export const OrganisationForm = () => {
             name: values.displayName,
             avatarUrl: values.avatarUrl,
             plan: values.plan,
-            default: values.default,
+            isDefault: values.default,
         };
 
         // Create the organisation
@@ -103,7 +95,7 @@ export const OrganisationForm = () => {
                 displayName: "",
                 plan: "ENTHUSIAST", // Default plan
                 avatarUrl: undefined, // No avatar by default
-                default: user?.memberships.length === 0, // Default to false unless user has no memberships
+                isDefault: user?.memberships.length === 0, // Default to false unless user has no memberships
             },
         });
 
@@ -147,6 +139,7 @@ export const OrganisationForm = () => {
         // Set the avatar URL in the form state
         const avatarURL = URL.createObjectURL(image);
         organisationCreationForm.setValue("avatarUrl", avatarURL);
+        URL.revokeObjectURL(avatarURL); // Clean up the object URL
     };
 
     const handleAvatarRemoval = (): void => {
@@ -161,17 +154,13 @@ export const OrganisationForm = () => {
     return (
         <Card className="w-auto flex-grow lg:max-w-2xl h-fit m-2 md:m-6 lg:m-12">
             <Form {...organisationCreationForm}>
-                <form
-                    onSubmit={organisationCreationForm.handleSubmit(
-                        handleSubmission
-                    )}
-                >
+                <form onSubmit={organisationCreationForm.handleSubmit(handleSubmission)}>
                     <CardHeader>
                         <CardTitle>Create a new organisation</CardTitle>
                         <CardDescription>
                             <br />
-                            Your organsation display name will be publically
-                            visible to all users when creating event routers.
+                            Your organsation display name will be publically visible to all users
+                            when creating event routers.
                             <br />
                             Your display name will need to be unique.
                         </CardDescription>
@@ -183,9 +172,7 @@ export const OrganisationForm = () => {
                                 name="avatarUrl"
                                 render={(_) => (
                                     <FormItem className="flex flex-col lg:flex-row w-full">
-                                        <FormLabel className="w-1/3">
-                                            Organisation Avatar
-                                        </FormLabel>
+                                        <FormLabel className="w-1/3">Organisation Avatar</FormLabel>
                                         <AvatarUploader
                                             onUpload={handleAvatarUpload}
                                             imageURL={organisationCreationForm.getValues(
@@ -201,10 +188,7 @@ export const OrganisationForm = () => {
                                 name="displayName"
                                 render={({ field }) => (
                                     <FormItem className="flex mt-2 flex-col lg:flex-row w-full">
-                                        <FormLabel
-                                            className="w-1/3"
-                                            htmlFor="displayName"
-                                        >
+                                        <FormLabel className="w-1/3" htmlFor="displayName">
                                             Organisation Name
                                         </FormLabel>
                                         <Input
@@ -224,9 +208,7 @@ export const OrganisationForm = () => {
                                 render={({ field }) => (
                                     <FormItem className="flex items-center mt-2 flex-col lg:flex-row">
                                         <div className="w-full md:w-1/3 mt-2">
-                                            <FormLabel htmlFor="plan">
-                                                Organisation Plan
-                                            </FormLabel>
+                                            <FormLabel htmlFor="plan">Organisation Plan</FormLabel>
                                             <Link
                                                 href={"/pricing"}
                                                 target="_blank"
@@ -249,12 +231,8 @@ export const OrganisationForm = () => {
                                                 <SelectItem value="ENTHUSIAST">
                                                     Enthusiast
                                                 </SelectItem>
-                                                <SelectItem value="PRO">
-                                                    Pro
-                                                </SelectItem>
-                                                <SelectItem value="TEAM">
-                                                    Team
-                                                </SelectItem>
+                                                <SelectItem value="PRO">Pro</SelectItem>
+                                                <SelectItem value="TEAM">Team</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormItem>
@@ -262,15 +240,12 @@ export const OrganisationForm = () => {
                             />
                             <FormField
                                 control={organisationCreationForm.control}
-                                name="default"
+                                name="isDefault"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-end gap-2 mt-4 mb-2">
                                         <FormControl>
                                             <Checkbox
-                                                disabled={
-                                                    user?.memberships.length ===
-                                                    0
-                                                }
+                                                disabled={user?.memberships.length === 0}
                                                 checked={field.value}
                                                 onCheckedChange={(checked) => {
                                                     field.onChange(checked);
@@ -295,11 +270,7 @@ export const OrganisationForm = () => {
                         >
                             Cancel
                         </Button>
-                        <Button
-                            type="submit"
-                            size={"sm"}
-                            className="cursor-pointer"
-                        >
+                        <Button type="submit" size={"sm"} className="cursor-pointer">
                             Create Organisation
                         </Button>
                     </CardFooter>

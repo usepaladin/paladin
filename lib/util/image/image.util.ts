@@ -14,6 +14,11 @@ export const imageUploadHelper = ({ handleUpload }: UploadHelperCallbacks) => {
 
         // Retrieve Uploaded File and handle uploading process
         const file = event.target.files[0];
-        await handleUpload(file);
+        try {
+            await handleUpload(file);
+        } finally {
+            // Allow re-selecting the same file
+            event.target.value = "";
+        }
     };
 };

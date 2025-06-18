@@ -1,5 +1,5 @@
 import { SupabaseClientResponse } from "@/lib/interfaces/interface";
-import { StorageError } from "@supabase/storage-js/dist/module/lib/errors";
+import { StorageError } from "@supabase/storage-js";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 const storageBuckets = ["profile-picture", "organisation-profile"] as const;
@@ -26,20 +26,16 @@ export const handlePublicFileUpload = async (
     filePath: string,
     upsert: boolean = false
 ): Promise<StorageResponse> => {
-    const { data, error } = await client.storage
-        .from(bucket)
-        .upload(filePath, upload, {
-            upsert,
-        });
+    const { data, error } = await client.storage.from(bucket).upload(filePath, upload, {
+        upsert,
+    });
 
     // Handle Failed Upload
     if (error || !data) {
         return { ok: false, error: error };
     }
 
-    const { data: urlData } = client.storage
-        .from(bucket)
-        .getPublicUrl(filePath);
+    const { data: urlData } = client.storage.from(bucket).getPublicUrl(filePath);
 
     // Retrieve the Public URL of the upload file
     if (!urlData?.publicUrl) {
@@ -61,7 +57,5 @@ export const handlePublicFileUpload = async (
  * @returns URL of the file
  */
 export const formatURLPath = (bucket: Bucket, filePath: string): string => {
-    return (
-        process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL + `/${bucket}/${filePath}`
-    );
+    return process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL + `/${bucket}/${filePath}`;
 };

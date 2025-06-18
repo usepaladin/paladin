@@ -1,5 +1,5 @@
-const page = () => {
-    return <div>page</div>;
+const Settings = () => {
+    return <div>Settings</div>;
 };
 
-export default page;
+export default Settings;

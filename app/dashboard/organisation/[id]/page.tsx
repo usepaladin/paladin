@@ -1,7 +1,7 @@
 import { OrganisationDashboard } from "@/components/feature-modules/organisation/dashboard/OrganisationDashboard";
 
-const page = () => {
+const Organisation = () => {
     return <OrganisationDashboard />;
 };
 
-export default page;
+export default Organisation;

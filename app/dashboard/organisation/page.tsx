@@ -9,9 +9,9 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const page = () => {
+const Organisation = () => {
     const { data: user, isPending } = useProfile();
-    const [organisationSearch, setOrganisationSearch] = useState<string | undefined>();
+    const [organisationSearch, setOrganisationSearch] = useState<string>("");
     const [renderedOrganisations, setRenderedOrganisations] = useState<OrganisationMember[]>(
         user?.memberships ?? []
     );
@@ -27,13 +27,13 @@ const page = () => {
         } else {
             setRenderedOrganisations([]);
         }
-    }, [user]);
+    }, [user, organisationSearch]);
 
     return (
-        <div className="w=full h-full m-6 md:m-12 lg:m-16">
+        <div className="w-full h-full m-6 md:m-12 lg:m-16">
             <h1 className="text-2xl text-content">Your Organisations</h1>
             <section className="flex mt-6 space-x-4">
-                <Link href={"organisation/new"}>
+                <Link href={"/dashboard/organisation/new"}>
                     <Button variant={"outline"} size={"sm"} className="h-full cursor-pointer">
                         <PlusCircle className="mr-2" />
                         Create Organisation
@@ -42,7 +42,7 @@ const page = () => {
                 <Input
                     className="w-full max-w-sm"
                     placeholder="Search Organisations"
-                    value={organisationSearch}
+                    value={organisationSearch ?? ""}
                     onChange={(e) => {
                         setOrganisationSearch(e.target.value);
                         if (user?.memberships) {
@@ -78,4 +78,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Organisation;

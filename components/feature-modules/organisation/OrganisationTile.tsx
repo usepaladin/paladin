@@ -19,7 +19,7 @@ export const OrganisationTile: FC<Props> = ({ membership }) => {
 
     return (
         <Card className="p-3 cursor-pointer hover:bg-card/60 rounded-md">
-            <Link href={`organisation/${organisation.id}`}>
+            <Link href={`/dashboard/organisation/${organisation.id}`}>
                 <CardContent className="px-2 w-72">
                     <section className="flex">
                         <div className="relative w-10 h-10 overflow-hidden rounded-md bg-background/60 border mr-4">
@@ -31,13 +31,9 @@ export const OrganisationTile: FC<Props> = ({ membership }) => {
                             />
                         </div>
                         <div>
-                            <div className="text-sm text-content">
-                                {organisation.name}
-                            </div>
+                            <div className="text-sm text-content">{organisation.name}</div>
                             <div className="text-xs text-content  flex items-center">
-                                <span>
-                                    {toTitleCase(organisation.plan)} Plan
-                                </span>
+                                <span>{toTitleCase(organisation.plan)} Plan</span>
                                 <span className="mx-2 text-base">•</span>
                                 <span>
                                     {organisation.memberCount} Member
@@ -48,13 +44,8 @@ export const OrganisationTile: FC<Props> = ({ membership }) => {
                     </section>
                     <section className="mt-4 text-xs text-content flex justify-between items-end">
                         <div>
-                            <div className="font-semibold">
-                                {toTitleCase(role)}
-                            </div>
-                            <div>
-                                Member since{" "}
-                                {new Date(memberSince).toLocaleDateString()}
-                            </div>
+                            <div className="font-semibold">{toTitleCase(role)}</div>
+                            <div>Member since {new Date(memberSince).toLocaleDateString()}</div>
                         </div>
                         <ArrowRightIcon className="w-5 h-5 text-content mb-1" />
                     </section>

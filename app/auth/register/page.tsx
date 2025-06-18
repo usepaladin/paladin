@@ -5,7 +5,7 @@ import RegisterForm from "@/components/feature-modules/authentication/Register";
 import { AuthClientHelper } from "@/lib/interfaces/auth.interface";
 import { supabaseServerAuthHelper } from "@/lib/util/auth/auth.util";
 
-const page = async () => {
+const Register = async () => {
     const authHelper: AuthClientHelper = await supabaseServerAuthHelper();
 
     return (
@@ -15,4 +15,4 @@ const page = async () => {
     );
 };
 
-export default page;
+export default Register;

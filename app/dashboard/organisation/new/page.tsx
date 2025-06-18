@@ -1,6 +1,6 @@
 import { OrganisationForm } from "@/components/feature-modules/organisation/OrganisationForm";
 
-const page = () => {
+const NewOrganisation = () => {
     return (
         <div className="w-full h-full flex justify-center">
             <OrganisationForm />
@@ -8,4 +8,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default NewOrganisation;

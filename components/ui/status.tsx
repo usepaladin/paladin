@@ -11,17 +11,9 @@ interface Props extends ClassNameProps {
 export const StatusIcon: FC<Props> = ({ status, className }) => {
     const statusStyleMap: Record<Status, string> = {
         healthy: "text-green-500 bg-green-500",
-        unhealthy: "text-red-500 bg-green-500",
-        unknown: "text-yellow-500 bg-green-500",
+        unhealthy: "text-red-500 bg-red-500",
+        unknown: "text-yellow-500 bg-yellow-500",
     };
 
-    return (
-        <div
-            className={cn(
-                "w-2 h-2 rounded-full",
-                statusStyleMap[status],
-                className
-            )}
-        />
-    );
+    return <div className={cn("w-2 h-2 rounded-full", statusStyleMap[status], className)} />;
 };

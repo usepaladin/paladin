@@ -1,5 +1,5 @@
-const page = () => {
+const Router = () => {
     return <div></div>;
 };
 
-export default page;
+export default Router;
