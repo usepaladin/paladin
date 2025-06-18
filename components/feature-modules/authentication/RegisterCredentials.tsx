@@ -36,17 +36,17 @@ const RegisterCredentials: FC<CredentialRegistrationProps> = ({
     return (
         <>
             <CardHeader className="pb-0">
-                <h1 className="text-xl lg:text-2xl font-bold">
+                <h1 className="text-xl lg:text-2xl font-semibold">
                     Let{"'"}s Get Started
                 </h1>
-                <h2 className=" font-semibold text-neutral-500 dark:text-neutral-400">
+                <h2 className="text-neutral-500 dark:text-neutral-400">
                     Create a new account
                 </h2>
             </CardHeader>
             <CardContent>
                 <Form {...registrationForm}>
                     <form
-                        className=" md:w-[25rem] mt-6"
+                        className=" md:w-[25rem]"
                         onSubmit={registrationForm.handleSubmit(
                             handleSubmission
                         )}

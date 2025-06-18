@@ -1,59 +1,68 @@
 "use client";
 
-import { useProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/components/provider/AuthContext";
 import { FCWC, Propless } from "@/lib/interfaces/interface";
+import { User } from "@/lib/interfaces/user.interface";
+import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
 import { FC } from "react";
+import { UserProfileDropdown } from "../avatar-dropdown";
 import { Button } from "../button";
+import { Skeleton } from "../skeleton";
 import { ModeToggle } from "../themeToggle";
 
-export const AuthenticatedNavbar: FC<Propless> = () => {
-    const { data: user, error, isLoading, isError } = useProfile();
+interface UserProps {
+    user: User;
+}
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+export const NavbarUserProfile: FC<UseQueryResult<User>> = ({
+    data: user,
+    isLoading: loadingProfile,
+}) => {
+    const { loading: loadingAuth } = useAuth();
 
-    if (isError || !user) {
-        return <div>Error loading profile</div>;
-    }
-
-    return (
-        <NavbarWrapper>
-            <div className="w-full flex">
-                <div>{user.name}</div>
-                <div className="mr-2">
-                    <Button variant={"outline"}>Logout</Button>
-                </div>
-            </div>
-        </NavbarWrapper>
-    );
+    if (loadingAuth || loadingProfile)
+        return <Skeleton className="size-8 rounded-md" />;
+    if (!user) return <UnauthenticatedNavbarProfile />;
+    return <AuthenticatedNavbarProfile user={user} />;
 };
 
-export const UnauthenticatedNavbar: FC<Propless> = () => {
+export const AuthenticatedNavbarProfile: FC<UserProps> = ({ user }) => {
+    return <UserProfileDropdown user={user} />;
+};
+
+export const UnauthenticatedNavbarProfile: FC<Propless> = () => {
     return (
-        <NavbarWrapper>
-            <div className="flex justify-end mr-4 flex-grow w-auto">
-                <div className="flex">
-                    <Button variant={"outline"}>
-                        <Link href="/auth/login">Login</Link>
-                    </Button>
-                    <Button className="ml-2">
-                        <Link href="/auth/register">Get Started</Link>
-                    </Button>
-                </div>
-            </div>
-        </NavbarWrapper>
+        <div className="flex">
+            <Button variant={"outline"}>
+                <Link href="/auth/login">Login</Link>
+            </Button>
+            <Button className="ml-2">
+                <Link href="/auth/register">Get Started</Link>
+            </Button>
+        </div>
     );
 };
 
 export const NavbarWrapper: FCWC<Propless> = ({ children }) => {
     return (
-        <div className="h-[4rem] sticky top-0 w-full border-b flex items-center px-4 bg-background/40 backdrop-blur-[4px]">
+        <div className="h-[4rem] sticky top-0 flex w-auto flex-grow border-b items-center px-4 bg-background/40 backdrop-blur-[4px]">
             {children}
             <div className="flex items-center">
                 <ModeToggle />
             </div>
         </div>
+    );
+};
+
+interface LogoProps {
+    href: string;
+}
+
+export const NavbarLogo: FC<LogoProps> = ({ href }) => {
+    return (
+        <Link href={href}>
+            <div className="text-lg font-bold w-32">[Logo]</div>
+        </Link>
     );
 };

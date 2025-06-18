@@ -2,7 +2,7 @@ import { AuthFormWrapper } from "@/components/feature-modules/authentication/Aut
 import LoginForm from "@/components/feature-modules/authentication/Login";
 import { supabaseServerAuthHelper } from "@/lib/util/auth/auth.util";
 
-const page = async () => {
+const Login = async () => {
     const authenticationHelper = await supabaseServerAuthHelper();
 
     return (
@@ -12,4 +12,4 @@ const page = async () => {
     );
 };
 
-export default page;
+export default Login;

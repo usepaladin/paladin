@@ -1,22 +1,13 @@
 import { AuthProvider } from "@/components/provider/AuthContext";
 import { ThemeProvider } from "@/components/provider/ThemeContext";
-import { Navbar } from "@/components/ui/nav/navbar";
+import { OnboardWrapper } from "@/components/util/onboard.wrapper";
 import QueryClientWrapper from "@/components/util/query.wrapper";
 import StoreProviderWrapper from "@/components/util/store.wrapper";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { Toaster } from "sonner";
+
 import "./globals.css";
-
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
     title: "Paladin | The Open Sourced Kafka Powered Event Driven Architecture Platform",
@@ -32,9 +23,9 @@ export const metadata: Metadata = {
     },
 };
 
-const robotoFont = Roboto({
+const MontserratFont = Montserrat({
     subsets: ["latin"],
-    weight: ["100", "400", "900"],
+    weight: ["100", "400", "700"],
 });
 
 export default function RootLayout({
@@ -44,29 +35,26 @@ export default function RootLayout({
 }>) {
     return (
         <html
-            className={robotoFont.className}
+            className={MontserratFont.className}
             lang="en"
             suppressHydrationWarning
         >
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
+            <body className={`antialiased`}>
                 <ThemeProvider
                     attribute={"class"}
                     defaultTheme="theme"
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <QueryClientWrapper>
-                        <StoreProviderWrapper>
-                            <AuthProvider>
-                                <main className="w-full">
-                                    <Navbar />
-                                    {children}
-                                </main>
-                            </AuthProvider>
-                        </StoreProviderWrapper>
-                    </QueryClientWrapper>
+                    <AuthProvider>
+                        <QueryClientWrapper>
+                            <StoreProviderWrapper>
+                                <OnboardWrapper>
+                                    <main className="w-full">{children}</main>
+                                </OnboardWrapper>
+                            </StoreProviderWrapper>
+                        </QueryClientWrapper>
+                    </AuthProvider>
                 </ThemeProvider>
                 <Toaster richColors />
             </body>
