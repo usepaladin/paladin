@@ -40,10 +40,6 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
         inputRef.current.click();
     };
 
-    const handleRemoveImage = () => {
-        onRemove && onRemove();
-    };
-
     return (
         <section className="flex items-center mt-2">
             <div className={cn("mt-2 relative group/picture", imageContainerClass)}>
@@ -91,9 +87,11 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({
                         <Upload className="w-4 h-4" />
                         <span>Upload Picture</span>
                     </Button>
-                    <Button type="button" onClick={handleRemoveImage} variant={"destructive"}>
-                        Remove
-                    </Button>
+                    {onRemove && (
+                        <Button type="button" onClick={onRemove} variant={"destructive"}>
+                            Remove
+                        </Button>
+                    )}
                 </div>
             </div>
         </section>
